@@ -20,4 +20,5 @@ public class OdometerHistory extends BaseEntityId implements BaseEntity {
     private Vehicle vehicle;
     @ManyToOne
     private LogEntry logEntry;
+    private Boolean isDeleted = false;
 }

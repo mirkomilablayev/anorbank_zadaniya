@@ -7,6 +7,7 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.baseEntities.BaseEn
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 public class LogEntry extends BaseEntityId implements BaseEntity {
-    private LocalDate journeyDate;
+    private LocalDateTime journeyDate;
     private String journeyShortDescription;
     @ManyToOne
     private User user;

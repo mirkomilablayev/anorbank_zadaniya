@@ -36,8 +36,8 @@ public class UserController extends AbstractController<UserService> {
     }
 
     @GetMapping("/showProfilePhoto/{photoId}")
-    public void showProfilePicture(){
-
+    public void showProfilnullePicture(@PathVariable Long photoId, HttpServletResponse response){
+        service.showPictures(photoId, response);
     }
 
     @GetMapping("/getUserPersonalData")

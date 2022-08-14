@@ -1,9 +1,7 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.controllers;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.AbstractController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.CrudController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.logEntry.LogEntryCreateDto;
@@ -20,21 +18,24 @@ public class LogEntryController extends AbstractController<LogEntryService> impl
     @PostMapping("/createLogEntry")
     @Override
     public HttpEntity<?> create(LogEntryCreateDto cd) {
-        return null;
+        return service.create(cd);
     }
 
+    @PutMapping("/updateLogEntry")
     @Override
     public HttpEntity<?> update(LogEntryUpdateDto cd) {
-        return null;
+        return service.update(cd);
     }
 
+    @GetMapping("/getLogEntry/{id}")
     @Override
-    public HttpEntity<?> get(Long id) {
-        return null;
+    public HttpEntity<?> get(@PathVariable Long id) {
+        return service.get(id);
     }
 
+    @DeleteMapping("/deleteById/{id}")
     @Override
-    public HttpEntity<?> deleteById(Long id) {
-        return null;
+    public HttpEntity<?> deleteById(@PathVariable Long id) {
+        return service.deleteById(id);
     }
 }
