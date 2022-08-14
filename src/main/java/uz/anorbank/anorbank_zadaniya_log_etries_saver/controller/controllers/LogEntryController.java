@@ -1,6 +1,7 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.controllers;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.AbstractController;
@@ -16,6 +17,7 @@ public class LogEntryController extends AbstractController<LogEntryService> impl
         super(service);
     }
 
+    @PostMapping("/createLogEntry")
     @Override
     public HttpEntity<?> create(LogEntryCreateDto cd) {
         return null;

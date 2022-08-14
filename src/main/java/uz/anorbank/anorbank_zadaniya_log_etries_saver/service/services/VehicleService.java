@@ -1,9 +1,11 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.service.services;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleCreateDto;
+import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleShowDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleUpdateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.User;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.Vehicle;
@@ -75,11 +77,28 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
 
     @Override
     public HttpEntity<?> get(Long id) {
-        return null;
+        Vehicle vehicle = repository.findByIdAndIsDeleted(id, false).orElseThrow(ResourceNotFoundException::new);
+        VehicleShowDto vehicleShowDto = makeVehicleShowDto(vehicle);
+        return ResponseEntity.status(HttpStatus.OK).body(vehicleShowDto);
+    }
+
+    private VehicleShowDto makeVehicleShowDto(Vehicle vehicle) {
+        VehicleShowDto vehicleShowDto = new VehicleShowDto();
+        vehicleShowDto.setType(vehicleShowDto.getType());
+        vehicleShowDto.setOwnerName(vehicle.getUser().getFirstName() + " " + vehicle.getUser().getLastName());
+        vehicleShowDto.setRegistrationNumber(vehicle.getRegistrationNumber());
+        vehicleShowDto.setCarColor(vehicle.getCarColor());
+        vehicleShowDto.setCarNumber(vehicle.getCarNumber());
+        vehicleShowDto.setCurrentTotalOdometerNumber(vehicle.getCurrentTotalOdometerNumber());
+        return vehicleShowDto;
     }
 
     @Override
     public HttpEntity<?> deleteById(Long id) {
-        return null;
+        Vehicle vehicle = repository.findByIdAndIsDeleted(id, false).orElseThrow(ResourceNotFoundException::new);
+        vehicle.setIsDeleted(true);
+        // TODO: 8/14/22 Shu yerda transport ishlamayapdimi yuqmi shuni tekshirishim kerak
+        repository.save(vehicle);
+        return ResponseEntity.ok("Successfully deleted");
     }
 }

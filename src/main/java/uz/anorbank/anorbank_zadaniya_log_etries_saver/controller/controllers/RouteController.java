@@ -1,8 +1,7 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.controllers;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.AbstractController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouetUpdateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouteCreateDto;
@@ -16,23 +15,33 @@ public class RouteController extends AbstractController<RouteService> implements
         super(service);
     }
 
+    @PostMapping("/createDestination")
     @Override
     public HttpEntity<?> create(RouteCreateDto cd) {
-        return null;
+        return service.create(cd);
     }
 
+    @PutMapping("/updateRoute}")
     @Override
     public HttpEntity<?> update(RouetUpdateDto cd) {
-        return null;
+        return service.update(cd);
     }
 
+    @GetMapping("/getFullInfoForDto/{id}")
     @Override
-    public HttpEntity<?> get(Long id) {
-        return null;
+    public HttpEntity<?> get(@PathVariable Long id) {
+        return service.get(id);
     }
 
+
+    @DeleteMapping("/deleteById/{id}")
     @Override
-    public HttpEntity<?> deleteById(Long id) {
-        return null;
+    public HttpEntity<?> deleteById(@PathVariable Long id) {
+        return service.deleteById(id);
+    }
+
+    @GetMapping("/getMyRoutes")
+    public HttpEntity<?> getMyRoutes(){
+        return service.getMyRoutes();
     }
 }

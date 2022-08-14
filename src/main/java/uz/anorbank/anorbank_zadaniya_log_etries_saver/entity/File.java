@@ -5,7 +5,6 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.baseEntities.BaseEn
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.baseEntities.BaseEntityId;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 @Setter
 @Getter
@@ -13,11 +12,10 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Route extends BaseEntityId implements BaseEntity {
-    private String fromDestination;
-    private String endDestination;
-    private Integer distance = 0;
+public class File extends BaseEntityId implements BaseEntity {
+    private String contentType;
+    private String originalName;
+    private String generatedName;
+    private String filePath;
     private Boolean isDeleted = false;
-    @ManyToOne
-    private User user;
 }

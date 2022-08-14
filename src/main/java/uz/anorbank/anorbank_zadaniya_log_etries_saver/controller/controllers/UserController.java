@@ -2,8 +2,11 @@ package uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.controllers;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.AbstractController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.services.UserService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,8 +26,13 @@ public class UserController extends AbstractController<UserService> {
     }
 
     @PostMapping("/saveUserProfilePhoto")
-    public HttpEntity<?> saveProfilePhoto(){
-        return null;
+    public HttpEntity<?> saveProfilePhoto(MultipartHttpServletRequest request){
+        return service.saveProfilePhoto(request);
+    }
+
+    @GetMapping("/ShowPic/{id}")
+    public void showFile(@PathVariable Long id, HttpServletResponse response){
+        service.showPictures(id,response);
     }
 
     @GetMapping("/showProfilePhoto/{photoId}")

@@ -13,6 +13,7 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.baseEntities.BaseEn
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
@@ -36,6 +37,8 @@ public class User extends BaseEntityId implements UserDetails, BaseEntity {
 
     @Column(nullable = false)
     private String phoneNumber;
+    @ManyToOne
+    private File logoFile;
 
 
     private Boolean isDeleted = false;
