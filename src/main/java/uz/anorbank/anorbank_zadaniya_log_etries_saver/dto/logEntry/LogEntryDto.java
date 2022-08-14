@@ -10,5 +10,5 @@ import lombok.*;
 public class LogEntryDto {
     private Boolean enableToGroupedByJourneyDate = true;
     private Boolean isSortedInIncOrder = true;
-
+    private LogEntryFilterMethod logEntryFilterMethod;
 }

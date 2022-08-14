@@ -85,7 +85,7 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
     private VehicleShowDto makeVehicleShowDto(Vehicle vehicle) {
         VehicleShowDto vehicleShowDto = new VehicleShowDto();
         vehicleShowDto.setType(vehicleShowDto.getType());
-        vehicleShowDto.setOwnerName(vehicle.getUser().getFirstName() + " " + vehicle.getUser().getLastName());
+        vehicleShowDto.setOwnerName(vehicle.getUser().getFullName());
         vehicleShowDto.setRegistrationNumber(vehicle.getRegistrationNumber());
         vehicleShowDto.setCarColor(vehicle.getCarColor());
         vehicleShowDto.setCarNumber(vehicle.getCarNumber());

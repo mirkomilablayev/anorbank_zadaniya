@@ -17,5 +17,6 @@ public class LogEntryShowDto {
     private Integer odometerStart;
     private Integer odometerEnd;
     private String route;
+    private Integer routeDistance;
     private String journeyShortDescription;
 }

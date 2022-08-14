@@ -42,7 +42,7 @@ public class AuthService implements UserDetailsService, BaseService {
         if (!userRepo.existsByUsernameAndIsDeleted(cd.getUsername(), false)) {
           User user = mapToUser(cd);
           User save = userRepo.save(user);
-          return ResponseEntity.ok(save.getFirstName()+" "+save.getLastName() +" IS SUCCESSFULLY SAVED");
+          return ResponseEntity.ok(save.getFullName() +" IS SUCCESSFULLY SAVED");
         }
         throw new UsernameAlreadyRegisterException(cd.getUsername() + " is already registered");
     }
@@ -51,10 +51,9 @@ public class AuthService implements UserDetailsService, BaseService {
         User user = new User();
         user.setPassword(passwordEncoder.encode(cd.getPassword()));
         user.setUsername(cd.getUsername());
+        user.setFullName(cd.getFullName());
         user.setBirthDate(cd.getBirthDate());
         user.setBirthPlace(cd.getBirthPlace());
-        user.setFirstName(cd.getFirstName());
-        user.setLastName(cd.getLastName());
         if (cd.getAsUser())
         user.setUserRoleSet(new HashSet<>(List.of(roleRepo.findByNameAndIsActive(Constant.USER, true).orElseThrow(ResourceNotFoundException::new))));
         else

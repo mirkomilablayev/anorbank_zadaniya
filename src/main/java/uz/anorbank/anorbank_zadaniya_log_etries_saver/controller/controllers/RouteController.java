@@ -21,7 +21,7 @@ public class RouteController extends AbstractController<RouteService> implements
         return service.create(cd);
     }
 
-    @PutMapping("/updateRoute}")
+    @PutMapping("/updateRoute")
     @Override
     public HttpEntity<?> update(RouetUpdateDto cd) {
         return service.update(cd);

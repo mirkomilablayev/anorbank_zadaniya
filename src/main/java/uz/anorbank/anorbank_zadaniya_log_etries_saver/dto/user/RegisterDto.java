@@ -19,9 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class RegisterDto  implements Dto {
     @Column(nullable = false)
-    private String firstName;
-
-    private String lastName;
+    private String fullName;
 
     @Column(nullable = false)
     private LocalDate birthDate;

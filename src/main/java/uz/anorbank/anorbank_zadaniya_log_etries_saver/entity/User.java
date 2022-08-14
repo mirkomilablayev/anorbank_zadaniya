@@ -25,9 +25,7 @@ import java.util.Set;
 @Entity(name = "users")
 public class User extends BaseEntityId implements UserDetails, BaseEntity {
     @Column(nullable = false)
-    private String firstName;
-
-    private String lastName;
+    private String fullName;
 
     @Column(nullable = false)
     private LocalDate birthDate;
