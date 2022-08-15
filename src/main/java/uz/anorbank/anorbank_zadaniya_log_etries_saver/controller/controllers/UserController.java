@@ -17,22 +17,17 @@ public class UserController extends AbstractController<UserService> {
 
     @PutMapping("/addDriverRoleToUser")
     public HttpEntity<?> addDriverRoleToUser() {
-        return null;
+        return service.addDriverRoleToUser();
     }
 
     @PutMapping("/addUserRoleToDriver")
     public HttpEntity<?> addUserRoleToDriver() {
-        return null;
+        return service.addUserRoleToDriver();
     }
 
     @PostMapping("/saveUserProfilePhoto")
     public HttpEntity<?> saveProfilePhoto(MultipartHttpServletRequest request){
         return service.saveProfilePhoto(request);
-    }
-
-    @GetMapping("/ShowPic/{id}")
-    public void showFile(@PathVariable Long id, HttpServletResponse response){
-        service.showPictures(id,response);
     }
 
     @GetMapping("/showProfilePhoto/{photoId}")
@@ -42,7 +37,7 @@ public class UserController extends AbstractController<UserService> {
 
     @GetMapping("/getUserPersonalData")
     public HttpEntity<?> getUserData(){
-        return null;
+        return service.getUserPersonalData();
     }
 
 }

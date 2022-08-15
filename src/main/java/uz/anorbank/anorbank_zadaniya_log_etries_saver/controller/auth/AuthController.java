@@ -26,8 +26,8 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final Util util;
 
-    @PostMapping("/registerAdmin")
-    public HttpEntity<?> registerA(@RequestBody RegisterDto registerDto) {
+    @PostMapping("/register")
+    public HttpEntity<?> register(@RequestBody RegisterDto registerDto) {
         return authService.register(registerDto);
     }
 

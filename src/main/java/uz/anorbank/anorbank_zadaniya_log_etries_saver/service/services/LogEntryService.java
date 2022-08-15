@@ -18,8 +18,8 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Util;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LogEntryService extends AbstractService<LogEntryRepo> implements BaseService, CrudService<LogEntryCreateDto, LogEntryUpdateDto> {
@@ -125,9 +125,8 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         return ResponseEntity.status(HttpStatus.OK).body("Log entry is successfully deleted");
     }
 
-    public HttpEntity<?> getReport(LogEntryDto logEntryDto) {
+    public HttpEntity<?> getReport(LogEntryFilterMethod filterMethod) {
         Long currentUserId = util.getCurrentUserId();
-        LogEntryFilterMethod filterMethod = logEntryDto.getLogEntryFilterMethod();
         String transportOwnerName = "";
         String registrationNumber = "";
         try {
@@ -139,110 +138,66 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         }
         boolean isDateIntervalValid = checkDateInterval(filterMethod);
         List<LogEntry> logEntries = repository.getAllLogEntries(currentUserId, registrationNumber, transportOwnerName);
-        return ResponseEntity.ok(getFilteredGroupedAndSortedResult(logEntries, isDateIntervalValid, filterMethod, logEntryDto.getEnableToGroupedByJourneyDate(), logEntryDto.getIsSortedInIncOrder()));
+        LogEntryResponse res = makeFinalResult(logEntries, isDateIntervalValid, filterMethod);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    private LogEntryResponse getFilteredGroupedAndSortedResult(List<LogEntry> logEntries,
-                                                               boolean isDateIntervalValid,
-                                                               LogEntryFilterMethod filterMethod,
-                                                               Boolean enableToGroupedByJourneyDate,
-                                                               Boolean isSortedInIncOrder) {
+    private LogEntryResponse makeFinalResult(List<LogEntry> logEntries, boolean isDateIntervalValid, LogEntryFilterMethod filterMethod) {
         List<LogEntryShowDto> res = new ArrayList<>();
-        Integer amountDistance = getAmountDistance(logEntries, isDateIntervalValid, filterMethod, res);
-        if (enableToGroupedByJourneyDate) {
-            return getGroupedAndFilteredLogEntryLogEntryResponse(isSortedInIncOrder, res, amountDistance);
-        } else {
-            return getLogEntryShowDtoLogEntryResponse(res, amountDistance);
+        Integer amountOdometer = 0;
+        for (LogEntry logEntry : logEntries) {
+            if (isDateIntervalValid) {
+                if (isDateChecker(logEntry, filterMethod)) {
+                    amountOdometer += logEntry.getRoute().getDistance();
+                    res.add(makeLogEntryShowDto(logEntry));
+                }
+            } else {
+                amountOdometer += logEntry.getRoute().getDistance();
+                res.add(makeLogEntryShowDto(logEntry));
+            }
         }
-    }
 
-    private LogEntryResponse<LogEntryShowDto> getLogEntryShowDtoLogEntryResponse(List<LogEntryShowDto> res, Integer amountDistance) {
-        LogEntryResponse<LogEntryShowDto> response = new LogEntryResponse<>();
-        response.setShowDtoList(res);
-        response.setAmountDistance(amountDistance);
+        LogEntryResponse response = new LogEntryResponse();
+        response.setAmountDistance(amountOdometer);
+        response.setShowDtoList(sortAndGroupList(res));
+
         return response;
     }
 
-    private LogEntryResponse<GroupedAndFilteredLogEntry> getGroupedAndFilteredLogEntryLogEntryResponse(Boolean isSortedInIncOrder, List<LogEntryShowDto> res, Integer amountDistance) {
-        List<GroupedAndFilteredLogEntry> logEntryList = getGroupedAndFilteredLogEntries(res);
-        sortedByDistance(isSortedInIncOrder, logEntryList);
-        LogEntryResponse<GroupedAndFilteredLogEntry> logEntryResponse = new LogEntryResponse<>();
-        logEntryResponse.setAmountDistance(amountDistance);
-        logEntryResponse.setShowDtoList(logEntryList);
-        return logEntryResponse;
-    }
-
-    private void sortedByDistance(Boolean isSortedInIncOrder, List<GroupedAndFilteredLogEntry> logEntryList) {
-        for (GroupedAndFilteredLogEntry filteredLogEntry : logEntryList) {
-            if (isSortedInIncOrder) {
-                List<LogEntryShowDto> collect = filteredLogEntry.getShowDtoList().stream().sorted().collect(Collectors.toList());
-                filteredLogEntry.setShowDtoList(collect);
-            } else {
-                filteredLogEntry.getShowDtoList().sort((item1, item2) ->
-                        item2.getRouteDistance().compareTo(item1.getRouteDistance()));
-            }
-        }
-    }
-
-    private List<GroupedAndFilteredLogEntry> getGroupedAndFilteredLogEntries(List<LogEntryShowDto> res) {
-        List<GroupedAndFilteredLogEntry> logEntryList = new ArrayList<>();
+    private List<GroupedAndFilteredLogEntry> sortAndGroupList(List<LogEntryShowDto> res) {
+        List<GroupedAndFilteredLogEntry> result = new ArrayList<>();
         for (LogEntryShowDto re : res) {
-            boolean isExist = isExistTime(re, logEntryList);
-            GroupedByDate(logEntryList, re, isExist);
-        }
-        return logEntryList;
-    }
-
-    private Integer getAmountDistance(List<LogEntry> logEntries, boolean isDateIntervalValid, LogEntryFilterMethod filterMethod, List<LogEntryShowDto> res) {
-        Integer amountDistance = 0;
-        for (LogEntry logEntry : logEntries) {
-            if (isDateIntervalValid) {
-                if (isaBoolean(filterMethod, logEntry)) {
-                    LogEntryShowDto logEntryShowDto = makeLogEntryShowDto(logEntry);
-                    res.add(logEntryShowDto);
-                    amountDistance += logEntry.getRoute().getDistance();
-                }
-            } else {
-                LogEntryShowDto logEntryShowDto = makeLogEntryShowDto(logEntry);
-                amountDistance += logEntry.getRoute().getDistance();
-                res.add(logEntryShowDto);
-            }
-        }
-        return amountDistance;
-    }
-
-    private void GroupedByDate(List<GroupedAndFilteredLogEntry> logEntryList, LogEntryShowDto re, boolean isExist) {
-        if (isExist) {
-            for (GroupedAndFilteredLogEntry filteredLogEntry : logEntryList) {
-                if (filteredLogEntry.getLogEntryDate().equals(re.getLogEntryDate())) {
-                    List<LogEntryShowDto> showDtoList = filteredLogEntry.getShowDtoList();
+            boolean exist = false;
+            for (GroupedAndFilteredLogEntry logEntry : result) {
+                if (logEntry.getLogEntryDate().equals(re.getLogEntryDate())) {
+                    List<LogEntryShowDto> showDtoList = logEntry.getShowDtoList();
                     showDtoList.add(re);
+                    logEntry.setShowDtoList(showDtoList);
+                    exist = true;
                     break;
                 }
             }
-        } else {
-            logEntryList.add(
-                    new GroupedAndFilteredLogEntry(re.getLogEntryDate(), new ArrayList<>(List.of(re)))
-            );
-        }
-    }
-
-    private boolean isExistTime(LogEntryShowDto re, List<GroupedAndFilteredLogEntry> logEntryList) {
-        boolean isExist = false;
-        for (GroupedAndFilteredLogEntry filteredLogEntry : logEntryList) {
-            if (filteredLogEntry.getLogEntryDate().equals(re.getLogEntryDate())) {
-                isExist = true;
-                break;
+            if (!exist){
+                result.add(new GroupedAndFilteredLogEntry(re.getLogEntryDate(), new ArrayList<>(List.of(re))));
             }
         }
-        return isExist;
+        return result;
     }
 
-    private boolean isaBoolean(LogEntryFilterMethod filterMethod, LogEntry logEntry) {
-        return (filterMethod.getJourneyDateFrom().equals(logEntry.getJourneyDate()) ||
-                filterMethod.getJourneyDateFrom().isAfter(logEntry.getJourneyDate()))
-                && (filterMethod.getJourneyDateTo().equals(logEntry.getJourneyDate()) ||
-                filterMethod.getJourneyDateTo().isBefore(logEntry.getJourneyDate()));
+    private boolean exist(LogEntryShowDto re, List<GroupedAndFilteredLogEntry> result) {
+        for (GroupedAndFilteredLogEntry entry : result) {
+            if (entry.getLogEntryDate().equals(re.getLogEntryDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDateChecker(LogEntry logEntry, LogEntryFilterMethod filterMethod) {
+        LocalDateTime from = filterMethod.getJourneyDateFrom();
+        LocalDateTime to = filterMethod.getJourneyDateTo();
+        LocalDateTime now = logEntry.getJourneyDate();
+        return ((from.equals(now) || from.isBefore(now)) && (to.equals(now) || to.isAfter(now)));
     }
 
 

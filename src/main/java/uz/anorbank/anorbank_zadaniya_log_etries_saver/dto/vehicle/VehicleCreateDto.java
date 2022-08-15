@@ -13,7 +13,6 @@ public class VehicleCreateDto  implements Dto {
     private String vehicleColor;
     private String vehicleNumber;
     private int odometerValueAtRegistration;
-    private int totalOdometerValue;
     private String type;
 
 }

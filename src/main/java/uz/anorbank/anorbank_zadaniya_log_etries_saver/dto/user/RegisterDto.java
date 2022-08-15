@@ -30,9 +30,6 @@ public class RegisterDto  implements Dto {
     @Column(nullable = false)
     private String phoneNumber;
 
-
-    private Boolean isDeleted = false;
-
     @Column(nullable = false)
     private String username;
 

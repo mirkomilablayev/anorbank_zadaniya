@@ -15,15 +15,15 @@ public class RouteController extends AbstractController<RouteService> implements
         super(service);
     }
 
-    @PostMapping("/createDestination")
+    @PostMapping("/createRoute")
     @Override
-    public HttpEntity<?> create(RouteCreateDto cd) {
+    public HttpEntity<?> create(@RequestBody RouteCreateDto cd) {
         return service.create(cd);
     }
 
     @PutMapping("/updateRoute")
     @Override
-    public HttpEntity<?> update(RouetUpdateDto cd) {
+    public HttpEntity<?> update(@RequestBody RouetUpdateDto cd) {
         return service.update(cd);
     }
 

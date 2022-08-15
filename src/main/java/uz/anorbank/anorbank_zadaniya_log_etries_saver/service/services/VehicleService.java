@@ -8,6 +8,7 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleCreateD
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleShowDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleUpdateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.User;
+import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.UserRole;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.Vehicle;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ConflictException;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ResourceNotFoundException;
@@ -15,7 +16,10 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.Ve
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.AbstractService;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.BaseService;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.CrudService;
+import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Constant;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Util;
+
+import java.util.Set;
 
 
 @Service
@@ -30,13 +34,27 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
 
     @Override
     public HttpEntity<?> create(VehicleCreateDto cd) {
+        if (!existRole(util.getCurrentUser().getUserRoleSet(), Constant.DRIVER)) {
+            throw new ConflictException(util.getCurrentUser().getFullName() + " cannot add driver because it has no driver role");
+        }
         if (!repository.existsByCarNumberAndIsDeleted(cd.getVehicleNumber(), false)) {
             Vehicle vehicle = mapToVehicle(cd);
-            repository.save(vehicle);
-            return ResponseEntity.ok("Car Successfully Saved");
+            Vehicle save = repository.save(vehicle);
+            return ResponseEntity.ok("Car Successfully Saved, id - " + save.getId());
         } else {
             throw new ConflictException(cd.getVehicleNumber() + " is already registred");
         }
+    }
+
+    private Boolean existRole(Set<UserRole> userRoleSet, String role) {
+        boolean exist = false;
+        for (UserRole userRole : userRoleSet) {
+            if (userRole.getAuthority().equals(role)) {
+                exist = true;
+                break;
+            }
+        }
+        return exist;
     }
 
     private Vehicle mapToVehicle(VehicleCreateDto cd) {
@@ -46,7 +64,11 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
         vehicle.setCarNumber(cd.getVehicleNumber());
         vehicle.setType(cd.getType());
         vehicle.setRegistrationNumber(cd.getRegistrationNumber());
-        vehicle.setTotalOdometerNumberAtRegistration(cd.getOdometerValueAtRegistration());
+        if (cd.getOdometerValueAtRegistration() > 0) {
+            vehicle.setTotalOdometerNumberAtRegistration(cd.getOdometerValueAtRegistration());
+        } else {
+            throw new ConflictException("Odometer value doesn't have to be negative number");
+        }
         User currentUser = util.getCurrentUser();
         vehicle.setUser(currentUser);
         return vehicle;
@@ -84,7 +106,7 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
 
     private VehicleShowDto makeVehicleShowDto(Vehicle vehicle) {
         VehicleShowDto vehicleShowDto = new VehicleShowDto();
-        vehicleShowDto.setType(vehicleShowDto.getType());
+        vehicleShowDto.setType(vehicle.getType());
         vehicleShowDto.setOwnerName(vehicle.getUser().getFullName());
         vehicleShowDto.setRegistrationNumber(vehicle.getRegistrationNumber());
         vehicleShowDto.setCarColor(vehicle.getCarColor());

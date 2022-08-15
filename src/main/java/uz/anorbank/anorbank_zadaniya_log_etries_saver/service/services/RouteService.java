@@ -38,7 +38,11 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
 
     private Route mapDtotoRoute(RouteCreateDto cd) {
         Route route = new Route();
-        route.setDistance(cd.getDistance());
+        if (cd.getDistance() > 0) {
+            route.setDistance(cd.getDistance());
+        }else {
+            throw new ConflictException("Distance doesn't have to be negative number");
+        }
         route.setEndDestination(cd.getEnd_destination());
         route.setFromDestination(cd.getFrom_destination());
         route.setUser(util.getCurrentUser());

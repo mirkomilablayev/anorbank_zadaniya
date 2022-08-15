@@ -33,7 +33,7 @@ public class VehicleController extends AbstractController<VehicleService> implem
         return service.get(id);
     }
 
-    @GetMapping("/deleteMyVehicle/{id}")
+    @DeleteMapping("/deleteMyVehicle/{id}")
     @Override
     public HttpEntity<?> deleteById(@PathVariable Long id) {
         return service.deleteById(id);

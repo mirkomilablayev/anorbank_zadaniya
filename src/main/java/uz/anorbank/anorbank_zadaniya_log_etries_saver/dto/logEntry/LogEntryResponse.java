@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class LogEntryResponse <T>{
-    private List<T> showDtoList;
+public class LogEntryResponse{
+    private List<GroupedAndFilteredLogEntry> showDtoList;
     private Integer amountDistance;
 }

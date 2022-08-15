@@ -20,8 +20,8 @@ public class Vehicle extends BaseEntityId implements BaseEntity {
     private String registrationNumber;
     private String carColor;
     private String carNumber;
-    private Integer totalOdometerNumberAtRegistration;
-    private Integer currentTotalOdometerNumber;
+    private Integer totalOdometerNumberAtRegistration = 0;
+    private Integer currentTotalOdometerNumber = 0;
     private Boolean isDeleted = false;
 
 }

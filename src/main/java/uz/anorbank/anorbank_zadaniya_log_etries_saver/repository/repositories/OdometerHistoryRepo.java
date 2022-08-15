@@ -6,6 +6,6 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.BaseRepository;
 
 import java.util.Optional;
 
-public interface  OdometerHistoryRepo extends JpaRepository<OdometerHistory, Long>, BaseRepository {
+public interface OdometerHistoryRepo extends JpaRepository<OdometerHistory, Long>, BaseRepository {
     Optional<OdometerHistory> findByLogEntry_IdAndIsDeleted(Long logEntry_id, Boolean isDeleted);
 }
