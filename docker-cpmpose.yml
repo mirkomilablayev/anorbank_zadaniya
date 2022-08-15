@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  app:
+    image: 'tg_bot:latest'
+    ports:
+      - 8080:8080
+    build:
+      context: .
+    container_name: tg_run
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tg_db:5433/log-entry-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_JPA_SHOW_SQL=true
+
+
+  postgres:
+    image: 'postgres:latest'
+    container_name: tg_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root123
