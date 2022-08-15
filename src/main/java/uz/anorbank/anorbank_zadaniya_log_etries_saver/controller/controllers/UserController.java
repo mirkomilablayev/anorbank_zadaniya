@@ -3,8 +3,10 @@ package uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.controllers;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import uz.anorbank.anorbank_zadaniya_log_etries_saver.config.anotation.CheckRole;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.controller.AbstractController;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.services.UserService;
+import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Constant;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,11 +17,13 @@ public class UserController extends AbstractController<UserService> {
         super(service);
     }
 
+    @CheckRole(Constant.USER)
     @PutMapping("/addDriverRoleToUser")
     public HttpEntity<?> addDriverRoleToUser() {
         return service.addDriverRoleToUser();
     }
 
+    @CheckRole(Constant.DRIVER)
     @PutMapping("/addUserRoleToDriver")
     public HttpEntity<?> addUserRoleToDriver() {
         return service.addUserRoleToDriver();
