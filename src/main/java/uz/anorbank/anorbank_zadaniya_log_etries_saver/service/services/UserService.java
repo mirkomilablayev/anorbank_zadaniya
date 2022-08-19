@@ -113,9 +113,9 @@ public class UserService extends AbstractService<UserRepo> implements BaseServic
             userRoleSet.add(userRole);
             currentUser.setUserRoleSet(userRoleSet);
             repository.save(currentUser);
-            return ResponseEntity.status(HttpStatus.OK).body(Constant.DRIVER + " role is successfully added");
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Constant.DRIVER + " role is already added");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Already Added");
         }
     }
 
@@ -134,9 +134,9 @@ public class UserService extends AbstractService<UserRepo> implements BaseServic
             userRoleSet.add(userRole);
             currentUser.setUserRoleSet(userRoleSet);
             repository.save(currentUser);
-            return ResponseEntity.status(HttpStatus.OK).body(Constant.DRIVER + " role is successfully added");
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Constant.DRIVER + " role is already added");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Already Added");
         }
     }
 

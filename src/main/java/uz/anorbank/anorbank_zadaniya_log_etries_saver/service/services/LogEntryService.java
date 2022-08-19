@@ -56,7 +56,7 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         Vehicle save1 = vehicleRepo.save(vehicle);
         odometerHistory.setVehicle(save1);
         odometerHistoryRepo.save(odometerHistory);
-        return ResponseEntity.ok("Log entry is successfully saved with id - " + save.getId() + " !!!");
+        return ResponseEntity.ok("Success");
     }
 
     private LogEntry makeLogEntry(LogEntryCreateDto cd) {
@@ -92,8 +92,8 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
             logEntry.setVehicle(vehicleRepo.findByIdAndIsDeleted(cd.getVehicleId(), false).orElseThrow(ResourceNotFoundException::new));
         }
 
-        LogEntry save = repository.save(logEntry);
-        return ResponseEntity.ok("id - " + save.getId() + " Log entry is successfully edited");
+        repository.save(logEntry);
+        return ResponseEntity.ok("Success");
     }
 
     @Override
@@ -122,7 +122,7 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         LogEntry logEntry = repository.findByIdAndIsDeleted(id, false).orElseThrow(ResourceNotFoundException::new);
         logEntry.setIsDeleted(true);
         repository.save(logEntry);
-        return ResponseEntity.status(HttpStatus.OK).body("Log entry is successfully deleted");
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 
     public HttpEntity<?> getReport(LogEntryFilterMethod filterMethod) {
@@ -182,15 +182,6 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
             }
         }
         return result;
-    }
-
-    private boolean exist(LogEntryShowDto re, List<GroupedAndFilteredLogEntry> result) {
-        for (GroupedAndFilteredLogEntry entry : result) {
-            if (entry.getLogEntryDate().equals(re.getLogEntryDate())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isDateChecker(LogEntry logEntry, LogEntryFilterMethod filterMethod) {

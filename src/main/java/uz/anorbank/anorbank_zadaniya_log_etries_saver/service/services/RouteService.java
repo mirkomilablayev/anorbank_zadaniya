@@ -32,8 +32,8 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
     @Override
     public HttpEntity<?> create(RouteCreateDto cd) {
         Route route = mapDtotoRoute(cd);
-        Route save = repository.save(route);
-        return ResponseEntity.ok(save);
+        repository.save(route);
+        return ResponseEntity.ok("Success");
     }
 
     private Route mapDtotoRoute(RouteCreateDto cd) {
@@ -65,8 +65,8 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
             route.setDistance(cd.getDistance());
         }
 
-        Route save = repository.save(route);
-        return ResponseEntity.ok(save);
+        repository.save(route);
+        return ResponseEntity.ok("Success");
     }
 
     @Override
@@ -93,7 +93,7 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
             Route route = repository.findByIdAndIsDeleted(id, false).orElseThrow(ResourceNotFoundException::new);
             route.setIsDeleted(true);
             repository.save(route);
-            return ResponseEntity.ok("You Successfully delete the route");
+            return ResponseEntity.ok("Success");
         }
     }
 

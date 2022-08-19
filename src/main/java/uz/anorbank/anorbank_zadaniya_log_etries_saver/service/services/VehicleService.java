@@ -40,9 +40,9 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
         if (!repository.existsByCarNumberAndIsDeleted(cd.getVehicleNumber(), false)) {
             Vehicle vehicle = mapToVehicle(cd);
             Vehicle save = repository.save(vehicle);
-            return ResponseEntity.ok("Car Successfully Saved, id - " + save.getId());
+            return ResponseEntity.ok("Success");
         } else {
-            throw new ConflictException(cd.getVehicleNumber() + " is already registred");
+            throw new ConflictException("Fail");
         }
     }
 
@@ -67,7 +67,7 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
         if (cd.getOdometerValueAtRegistration() > 0) {
             vehicle.setTotalOdometerNumberAtRegistration(cd.getOdometerValueAtRegistration());
         } else {
-            throw new ConflictException("Odometer value doesn't have to be negative number");
+            throw new ConflictException("Fail");
         }
         User currentUser = util.getCurrentUser();
         vehicle.setUser(currentUser);
@@ -80,7 +80,7 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
         Vehicle vehicle = repository.findByIdAndIsDeleted(cd.getCarId(), false).orElseThrow(ResourceNotFoundException::new);
         Vehicle updatedVehicle = updateVehicle(vehicle, cd);
         repository.save(updatedVehicle);
-        return ResponseEntity.ok("Car Is Successfully Updated");
+        return ResponseEntity.ok("Success");
     }
 
     private Vehicle updateVehicle(Vehicle vehicle, VehicleUpdateDto cd) {
@@ -119,7 +119,6 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
     public HttpEntity<?> deleteById(Long id) {
         Vehicle vehicle = repository.findByIdAndIsDeleted(id, false).orElseThrow(ResourceNotFoundException::new);
         vehicle.setIsDeleted(true);
-        // TODO: 8/14/22 Shu yerda transport ishlamayapdimi yuqmi shuni tekshirishim kerak
         repository.save(vehicle);
         return ResponseEntity.ok("Successfully deleted");
     }
