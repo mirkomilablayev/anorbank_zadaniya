@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.logEntry.*;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.*;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ResourceNotFoundException;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Transactional
 public class LogEntryService extends AbstractService<LogEntryRepo> implements BaseService, CrudService<LogEntryCreateDto, LogEntryUpdateDto> {
 
 

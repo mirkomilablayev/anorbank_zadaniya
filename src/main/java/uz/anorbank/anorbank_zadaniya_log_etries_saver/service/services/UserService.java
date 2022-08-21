@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -30,6 +31,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
+@Transactional
 public class UserService extends AbstractService<UserRepo> implements BaseService {
     private final FileRepo fileRepo;
     private final Util util;

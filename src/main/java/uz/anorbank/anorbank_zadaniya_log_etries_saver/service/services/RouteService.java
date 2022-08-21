@@ -3,6 +3,7 @@ package uz.anorbank.anorbank_zadaniya_log_etries_saver.service.services;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouetUpdateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouteCreateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouteShowDto;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class RouteService extends AbstractService<RouteRepo> implements BaseService, CrudService<RouteCreateDto, RouetUpdateDto> {
     private final Util util;
     private final LogEntryRepo logEntryRepo;
@@ -107,4 +109,7 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
         }
         return ResponseEntity.ok(routeShowDtos);
     }
+
+
+
 }

@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleCreateDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleShowDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.vehicle.VehicleUpdateDto;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 
 @Service
+@Transactional
 public class VehicleService extends AbstractService<VehicleRepo> implements BaseService, CrudService<VehicleCreateDto, VehicleUpdateDto> {
 
     private final Util util;

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.user.RegisterDto;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.User;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.UserRole;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+    @Transactional
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService, BaseService {
     private final PasswordEncoder passwordEncoder;
@@ -39,10 +41,12 @@ public class AuthService implements UserDetailsService, BaseService {
 
 
     public HttpEntity<?> register(RegisterDto cd) {
+        System.out.println("ASAs");
         if (!userRepo.existsByUsernameAndIsDeleted(cd.getUsername(), false)) {
           User user = mapToUser(cd);
+          user.setPassword(passwordEncoder.encode(cd.getPassword()));
           User save = userRepo.save(user);
-          return ResponseEntity.ok(save.getFullName() +" IS SUCCESSFULLY SAVED");
+          return ResponseEntity.ok(save);
         }
         throw new UsernameAlreadyRegisterException(cd.getUsername() + " is already registered");
     }
@@ -54,6 +58,7 @@ public class AuthService implements UserDetailsService, BaseService {
         user.setFullName(cd.getFullName());
         user.setBirthDate(cd.getBirthDate());
         user.setBirthPlace(cd.getBirthPlace());
+        user.setPassword(passwordEncoder.encode(cd.getPassword()));
         if (cd.getAsUser())
         user.setUserRoleSet(new HashSet<>(List.of(roleRepo.findByNameAndIsActive(Constant.USER, true).orElseThrow(ResourceNotFoundException::new))));
         else

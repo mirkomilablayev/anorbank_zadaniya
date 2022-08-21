@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class RouteShowDto {
     private String fromDestination;
     private String endDestination;

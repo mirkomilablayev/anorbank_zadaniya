@@ -8,6 +8,8 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.Dto;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class RouetUpdateDto  implements Dto {
     private Long routeId;
     private String startDestination;
