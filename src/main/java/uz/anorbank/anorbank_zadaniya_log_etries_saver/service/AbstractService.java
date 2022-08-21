@@ -9,6 +9,8 @@ public abstract class AbstractService<R extends BaseRepository> implements BaseS
     public AbstractService(R repository) {
         this.repository = repository;
     }
+
+
 }
 
 

@@ -15,5 +15,4 @@ public class RouteShowDto {
     private String fromDestination;
     private String endDestination;
     private Integer distance = 0;
-
 }

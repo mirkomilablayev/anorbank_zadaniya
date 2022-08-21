@@ -80,7 +80,7 @@ public class RouteService extends AbstractService<RouteRepo> implements BaseServ
 
     private RouteShowDto makeRouteShowDto(Route route) {
         RouteShowDto routeShowDto = new RouteShowDto();
-        routeShowDto.setDistance(routeShowDto.getDistance());
+        routeShowDto.setDistance(route.getDistance());
         routeShowDto.setEndDestination(route.getEndDestination());
         routeShowDto.setFromDestination(route.getFromDestination());
         return routeShowDto;
