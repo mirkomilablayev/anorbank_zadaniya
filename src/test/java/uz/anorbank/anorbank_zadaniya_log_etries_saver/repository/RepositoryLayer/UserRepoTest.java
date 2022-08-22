@@ -3,7 +3,6 @@ package uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.RepositoryLaye
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.User;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.UserRole;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ResourceNotFoundException;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class UserRepoTest {
@@ -60,26 +59,7 @@ class UserRepoTest {
      */
     @Test
     void itShouldCheckUserIfDoesNotExistByUsernameAndIsDeleted(){
-        //given
-        String username = "mirkomil_ablayev1";
-        UserRole userRole = roleRepo.save(new UserRole(Constant.USER));
-        UserRole driverRole = roleRepo.save(new UserRole(Constant.DRIVER));
-        User savedUser = underTest.save(new User(
-                "Mirkomil Ablayev",
-                LocalDate.now().minusYears(19),
-                "Samarqand Ishtixon",
-                "+998945331738",
-                null,
-                false,
-                username,
-                "1212",
-                new HashSet<>(Arrays.asList(userRole, driverRole))
-        ));
-
-        //when
         Boolean expected = underTest.existsByUsernameAndIsDeleted("any Username", false);
-
-        //then
         assertThat(expected).isFalse();
     }
 
@@ -118,24 +98,7 @@ class UserRepoTest {
     void itShouldCheckThrowingExceptionIfDoesNotFindUserByUsernameAndIsDeleted(){
         //given
         String username = "mirkomil_ablayev1";
-        UserRole userRole = roleRepo.save(new UserRole(Constant.USER));
-        UserRole driverRole = roleRepo.save(new UserRole(Constant.DRIVER));
-        User savedUser = underTest.save(new User(
-                "Mirkomil Ablayev",
-                LocalDate.now().minusYears(19),
-                "Samarqand Ishtixon",
-                "+998945331738",
-                null,
-                false,
-                username,
-                "1212",
-                new HashSet<>(Arrays.asList(userRole, driverRole))
-        ));
-        //when
-        //then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            underTest.findByUsernameAndIsDeleted(username+"1", false).orElseThrow(ResourceNotFoundException::new);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> underTest.findByUsernameAndIsDeleted(username+"1", false).orElseThrow(ResourceNotFoundException::new));
     }
 
 }

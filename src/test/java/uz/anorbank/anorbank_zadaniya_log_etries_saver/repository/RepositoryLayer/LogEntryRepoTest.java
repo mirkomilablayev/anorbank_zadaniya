@@ -1,7 +1,5 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.RepositoryLayer;
 
-import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -64,35 +62,14 @@ class LogEntryRepoTest {
                 new HashSet<>(Arrays.asList(userRole, driverRole))
         ));
 
-        Vehicle savedVehicle = vehicleRepo.save(new Vehicle(
-                "Nexia",
-                savedUser,
-                "Blue",
-                "AS191991",
-                "30Y287KA",
-                198000,
-                260000,
-                false
-        ));
 
-        Route savedRoue = routeRepo.save(new Route(
+        return routeRepo.save(new Route(
                 "Samarkand",
                 "Tashkent",
                 240,
                 false,
                 savedUser
         ));
-
-
-        LogEntry savedLogEntry = underTest.save(new LogEntry(
-                LocalDateTime.now().minusDays(3),
-                "Journay Short Desktription",
-                savedUser,
-                savedVehicle,
-                savedRoue,
-                false
-        ));
-        return savedRoue;
     }
 
     private LogEntry getLogEntryId() {

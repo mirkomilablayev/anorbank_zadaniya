@@ -1,6 +1,5 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.RepositoryLayer;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,14 +12,12 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.Us
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.VehicleRepo;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Constant;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DataJpaTest
@@ -205,9 +202,7 @@ class VehicleRepoTest {
         //when
 
         //then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            underTest.findByIdAndIsDeleted((savedVehicle.getId() + 1), false).orElseThrow(ResourceNotFoundException::new);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> underTest.findByIdAndIsDeleted((savedVehicle.getId() + 1), false).orElseThrow(ResourceNotFoundException::new));
     }
 
 

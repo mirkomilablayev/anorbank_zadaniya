@@ -92,9 +92,7 @@ class RouteRepoTest {
 
         //when
         //then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            underTest.findByIdAndIsDeleted((savedRoute.getId() + 1), false).orElseThrow(ResourceNotFoundException::new);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> underTest.findByIdAndIsDeleted((savedRoute.getId() + 1), false).orElseThrow(ResourceNotFoundException::new));
     }
 
 

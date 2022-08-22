@@ -1,6 +1,5 @@
 package uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.RepositoryLayer;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -8,10 +7,8 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.entity.File;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ResourceNotFoundException;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.FileRepo;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 class FileRepoTest {
 
@@ -58,9 +55,7 @@ class FileRepoTest {
         //when
         File save = underTest.save(file);
         //then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            underTest.findByIdAndIsDeleted((save.getId()+1), false).orElseThrow(ResourceNotFoundException::new);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> underTest.findByIdAndIsDeleted((save.getId()+1), false).orElseThrow(ResourceNotFoundException::new));
     }
 
 }
