@@ -19,7 +19,6 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Util;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -46,6 +45,11 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         LogEntry save = repository.save(logEntry);
 
         // bu yerda odometer yangi hitory yaratamiz
+        makeOdometer(logEntry, save);
+        return ResponseEntity.ok("Success");
+    }
+
+    private void makeOdometer(LogEntry logEntry, LogEntry save) {
         OdometerHistory odometerHistory = new OdometerHistory();
         odometerHistory.setLogEntry(save);
         Integer currentTotalOdometerNumber = save.getVehicle().getCurrentTotalOdometerNumber();
@@ -58,7 +62,6 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
         Vehicle save1 = vehicleRepo.save(vehicle);
         odometerHistory.setVehicle(save1);
         odometerHistoryRepo.save(odometerHistory);
-        return ResponseEntity.ok("Success");
     }
 
     private LogEntry makeLogEntry(LogEntryCreateDto cd) {
@@ -129,8 +132,8 @@ public class LogEntryService extends AbstractService<LogEntryRepo> implements Ba
 
     public HttpEntity<?> getReport(LogEntryFilterMethod filterMethod) {
         Long currentUserId = util.getCurrentUserId();
-        String transportOwnerName = "";
-        String registrationNumber = "";
+        String transportOwnerName;
+        String registrationNumber ;
         try {
             transportOwnerName = filterMethod.getTransportOwnerName();
             registrationNumber = filterMethod.getTransportRegistrationNumber();

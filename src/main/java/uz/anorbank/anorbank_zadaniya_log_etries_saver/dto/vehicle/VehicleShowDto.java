@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class VehicleShowDto {
     private String type;
     private String ownerName;

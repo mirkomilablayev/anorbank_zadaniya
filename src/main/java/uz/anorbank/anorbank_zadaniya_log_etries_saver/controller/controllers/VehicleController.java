@@ -17,28 +17,28 @@ public class VehicleController extends AbstractController<VehicleService> implem
         super(service);
     }
 
-    @CheckRole(Constant.DRIVER)
+
     @PostMapping("/createVehicle")
     @Override
     public HttpEntity<?> create(VehicleCreateDto cd) {
         return service.create(cd);
     }
 
-    @CheckRole(Constant.DRIVER)
+
     @PutMapping("/updateVehicle")
     @Override
     public HttpEntity<?> update(VehicleUpdateDto cd) {
         return service.update(cd);
     }
 
-    @CheckRole(Constant.DRIVER)
+
     @GetMapping("/getMyVehiclesFullInfo/{id}")
     @Override
     public HttpEntity<?> get(@PathVariable Long id) {
         return service.get(id);
     }
 
-    @CheckRole(Constant.DRIVER)
+
     @DeleteMapping("/deleteMyVehicle/{id}")
     @Override
     public HttpEntity<?> deleteById(@PathVariable Long id) {

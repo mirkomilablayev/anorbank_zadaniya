@@ -36,28 +36,17 @@ public class VehicleService extends AbstractService<VehicleRepo> implements Base
 
     @Override
     public HttpEntity<?> create(VehicleCreateDto cd) {
-        if (!existRole(util.getCurrentUser().getUserRoleSet(), Constant.DRIVER)) {
-            throw new ConflictException(util.getCurrentUser().getFullName() + " cannot add driver because it has no driver role");
-        }
+        User currentUser = util.getCurrentUser();
         if (!repository.existsByCarNumberAndIsDeleted(cd.getVehicleNumber(), false)) {
             Vehicle vehicle = mapToVehicle(cd);
-            Vehicle save = repository.save(vehicle);
+            repository.save(vehicle);
             return ResponseEntity.ok("Success");
         } else {
             throw new ConflictException("Fail");
         }
     }
 
-    private Boolean existRole(Set<UserRole> userRoleSet, String role) {
-        boolean exist = false;
-        for (UserRole userRole : userRoleSet) {
-            if (userRole.getAuthority().equals(role)) {
-                exist = true;
-                break;
-            }
-        }
-        return exist;
-    }
+
 
     private Vehicle mapToVehicle(VehicleCreateDto cd) {
         Vehicle vehicle = new Vehicle();

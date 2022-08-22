@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class LogEntryShowDto {
     private LocalDateTime logEntryDate;
     private String vehicleType;

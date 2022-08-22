@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.dto.route.RouetUpdateDto;
@@ -21,7 +20,6 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.exceptions.ResourceNotFoun
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.LogEntryRepo;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.RoleRepo;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.RouteRepo;
-import uz.anorbank.anorbank_zadaniya_log_etries_saver.repository.repositories.UserRepo;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.service.services.RouteService;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Constant;
 import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Util;
@@ -29,8 +27,8 @@ import uz.anorbank.anorbank_zadaniya_log_etries_saver.tools.Util;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @AutoConfigureMockMvc
@@ -47,8 +45,6 @@ public class RouteServiceTest {
     @Mock
     private LogEntryRepo logEntryRepo;
 
-    @Mock
-    private UserRepo userRepo;
 
     @Mock
     private Util util;
@@ -56,26 +52,10 @@ public class RouteServiceTest {
     @InjectMocks
     private RouteService routeService;
 
-    private final List<Route> routeList = new ArrayList<Route>();
+    private final List<Route> routeList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        UserRole userRole = roleRepo.save(new UserRole(Constant.USER));
-        UserRole driverRole = roleRepo.save(new UserRole(Constant.DRIVER));
-
-        User user = new User(
-                "Mirkomil Ablayev",
-                LocalDate.now().minusYears(19),
-                "Samarqand Ishtixon",
-                "+998945331738",
-                null,
-                false,
-                "mirkomil_ablayev",
-                "1212",
-                new HashSet<>(Arrays.asList(userRole, driverRole))
-        );
-
-        String carNumber = "30Y287KA";
         Route route = new Route("Samarkand", "Toshkent", 100, false, null);
         route.setId(7L);
         routeList.add(route);
